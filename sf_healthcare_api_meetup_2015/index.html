@@ -70,39 +70,139 @@ class: center,middle
 
 # GET /index
 
-<ol>
-  <li>Who am I</li>
-  <li>What and why</li>
-  <li>Code</li>
-</ol>
+### What we do
+### Why we do it
+### Code
+### Resources
 
 ---
+class: center,middle
 
-# GET /me
 .center[<img src="riney_apple.jpg" class="big-img" alt="me and apple 2+">]
 
 ---
 
-# What we do
+class: center,middle
+
+# The operating system
+# for digital health.
+
+---
+class: center,middle
+
 ### Insurance company (payer) stuff
 ### Curated data stuff
-### Other stuff
+### Interoperability stuff
 
 ---
 
-# Insurance company stuff (X12)
+# Insurance company stuff
 
 <ul>
-  <li>Eligibility (plan structure, deductibles)</li>
+  <li>Eligibility (coverage, plan structure, deductibles)</li>
   <li>Claims and claims status</li>
   <li>Enrollment</li>
   <li>Authorizations</li>
   <li>Referrals</li>
 </ul>
 
+### ... AKA ASC X12
 ---
 
-# Data stuff
+# X12 Eligibility request
+
+```html
+HL*1**20*1~NM1*PR*2*Premium Gold Insurance Co.*****PI*0123456~HL*2*1*21*1~NM1*1P*
+1*Back*Has*Your***XX*9876543210~HL*3*2*22*0~TRN*1*89368DC6A14E4E529AA876ED416E8A9F
+*1453915417~NM1*IL*1*A-lot*Lifts****MI*MEM10001~DMG*D8*19820315*M~EQ*98^33~
+```
+
+---
+
+# Our Eligibility request
+
+```javascript
+{
+  "member": {
+    "birth_date": "1982-03-15",
+    "first_name": "Lifts",
+    "last_name": "A-Lot",
+    "id": "MEM10001"
+  },
+  "provider": {
+    "first_name": "Has-Your",
+    "last_name": "Back",
+    "npi": "9876543210"
+  },
+  "service_types": ["professional_physician_visit_office", "chiropractic"],
+  "trading_partner_id": "premium_gold_insurance"
+}
+```
+
+---
+
+# X12 Eligibility response
+
+```html
+HL*1**20*1~NM1*PR*2*Premium Gold Insurance Co.*****PI*0123456~HL*2*1*21*1~NM1*1P*
+1*Back*Has*Your***XX*9876543210~HL*3*2*22*0~TRN*2*89368DC6A14E4E529AA876ED416E8A9F*
+1453915417NM1*IL*1*A-lot*Lifts****MI*MEM10001~N3*2150 Pleasant Drive~N4*Sunny*CA*
+900010001~DMG*D8*19820315*M~DTP*291*D8*20141001~EB*B**98****10~EB*A**33*****.20~
+```
+
+### oh God make it stop
+---
+
+# Our Eligibility response
+
+```javascript
+{
+  "coverage": [
+    "coinsurance": [
+      {
+        "benefit_percent": 0.2,
+        "service_types": [
+          "chiropractic"
+        ]
+      }
+    ],
+    "copay": {
+      "copayment": {
+        "amount": "10",
+        "currency": "USD"
+      },
+      "service_types": [
+        "professional_physician_visit_office"
+      ]
+    }
+  ],
+  "plan_begin_date": "2014-10-01",
+
+  (...and so on...)
+}
+```
+
+---
+
+# Hot tech from 1979
+
+.center[<img src="apple2plus.jpg" class="big-img" alt="apple 2+">]
+
+---
+
+class: center,middle
+
+# Also from 1979?
+
+---
+
+class: center,middle
+
+# All that X12 crap
+
+---
+
+# Curated data stuff
 
 <ul>
   <li>Provider search</li>
@@ -113,7 +213,7 @@ class: center,middle
 
 ---
 
-# Other stuff
+# Interop stuff
 
 <ul>
   <li>Integration with EMR/EHR systems, such as...</li>
@@ -121,6 +221,8 @@ class: center,middle
   <li>CCD (Continuity of care documents)</li>
   <li>Identity management</li>
 </ul>
+
+These require some customization, though.
 
 ---
 
@@ -131,50 +233,31 @@ class: center middle
 ---
 
 # BECAUSE GRAPHS
-.center[<img src="graff.gif" class="big-img" alt="me and apple 2+">]
+.center[<img src="graff.gif" class="big-img" alt="graphs are cool">]
 
 ---
 
-# Get to the code already
+# not Health IT
 
-#### Setup
-```python
-import pokitdok
-pd = pokitdok.api.connect('<your client id>', '<your client secret>')
-```
-
-#### Provider search
-```python
-pd.providers(npi='1467560003')
-```
-
-#### Price lookup
-```python
-pd.insurance_prices(zip_code='32218', cpt_code='87799')
-```
+.center[<img src="healthit.jpg" class="big-img" alt="yuck">]
 
 ---
 
-# Get to the code already
+# We're a real API company
 
-#### Eligibility check
-```python
-pd.eligibility({
-    "member": {
-        "birth_date": "1970-01-01",
-        "first_name": "Jane",
-        "last_name": "Doe",
-        "id": "W000000000"
-    },
-    "provider": {
-        "first_name": "JEROME",
-        "last_name": "AYA-AY",
-        "npi": "1467560003"
-    },
-    "service_types": ["health_benefit_plan_coverage"],
-    "trading_partner_id": "MOCKPAYER"
-})
-```
+### no hidden pricing
+
+### no certification or "app stores"
+
+### no stupid contracts to get started
+
+### no paid docs
+(yes that's a thing)
+
+---
+
+class: center,middle
+# Get to the code already
 
 ---
 
@@ -189,7 +272,8 @@ pd.eligibility({
 #### Github
 [github.com/pokitdok](https://github.com/pokitdok)
 
----
+#### These slides
+[github.com/riney/slide-decks](https://github.com/riney/slide-decks)
 
     </textarea>
     <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
