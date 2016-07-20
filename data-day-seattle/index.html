@@ -51,12 +51,26 @@
       }
 
       .really-big-img {
-        height: 600px;
+        height: 500px;
       }
 
-      .hco-img {
-        width: 90%;
-        height: 90%;
+      .graph-schema {
+          position: fixed;
+          top: 50px;
+          left: 70px;
+
+          height: 750px;
+       }
+
+      .top-most {
+          background-postion: top center;
+      }
+
+      .big-width {
+          background-size: auto 90%;
+      }
+      .big-height {
+          background-size: 75% auto;
       }
 
       a {
@@ -71,6 +85,21 @@ layout: true
 class: slide
 <img src="pd-logo.png" class="pd-logo">
 
+
+---
+
+# Graphs vs Tables
+
+### First Half: 12:50 - 1:35 (ish)
+#### Intro to the debate
+#### Similarity from Graph traversals
+#### Similarity from Tabular data
+
+### Second Half: 1:45 - 2:30 (ish)
+#### Demos
+#### Discussion
+ ¯\\_(ツ)_/¯
+
 ---
 
 class: center,middle
@@ -83,21 +112,202 @@ class: center,middle
 
 ---
 
-# /about/us
+# /agenda
+
+### First Half: 12:50 - 1:35 (ish)
+#### Intro to the debate
+#### Similarity from Graph traversals
+#### Similarity from Tabular data
+
+### Second Half: 1:45 - 2:30 (ish)
+#### Demos
+#### Discussion
+ ¯\\_(ツ)_/¯
 
 ---
-# `\(\LaTeX{}\)` in remark
+
+# /about/pokitdok
+
+--
+
+### "The Operating System For The Business Of Health"
 
 ---
 
-# Display and Inline
+class: center, middle
 
-1. This is an inline integral: `\(\int_a^bf(x)dx\)`
-2. More `\(x={a \over b}\)` formulae.
+# Health?
 
-Display formula:
+---
 
-$$e^{i\pi} + 1 = 0$$
+class: center, middle
+
+# #1
+
+--
+
+### Medical bills are the primary cause of personal bankruptcy in the U.S.
+
+---
+
+class: center, middle
+
+# $12,900
+
+--
+
+### Average out of pocket spend before insurance starts paying, for families on HDHPs
+
+---
+
+class: center, middle
+
+# $42.8 billion
+
+--
+
+### National uncompensated care costs (charity care + bad debt), 2014
+
+---
+
+.center[<img src="tc.png" class="big-img" alt="apple 2+">]
+
+Source: "What’s Really Killing Digital Health Startups" 10/30/2015 by John Sung Kim (@JohnSungKim)
+[http://techcrunch.com/2015/10/30/whats-really-killing-digital-health-startups/](http://techcrunch.com/2015/10/30/whats-really-killing-digital-health-startups/)
+
+---
+
+# The core == insurance companies (payers)
+
+<ul>
+  <li>Eligibility (coverage, plan structure, deductibles)</li>
+  <li>Claims and claims status</li>
+  <li>Enrollment</li>
+  <li>Authorizations</li>
+  <li>Referrals</li>
+</ul>
+
+### ... AKA ASC X12 5010.
+
+---
+
+# X12 Eligibility request
+
+```html
+HL*1**20*1~NM1*PR*2*Premium Gold Insurance Co.*****PI*0123456~HL*2*1*21*1~NM1*1P*
+1*Back*Has*Your***XX*9876543210~HL*3*2*22*0~TRN*1*89368DC6A14E4E529AA876ED416E8A9F
+*1453915417~NM1*IL*1*A-lot*Lifts****MI*MEM10001~DMG*D8*19820315*M~EQ*98^33~
+```
+
+#### (the spec for this one request is 552 pages)
+
+---
+
+# Our Eligibility request
+
+```javascript
+{
+  "member": {
+    "birth_date": "1982-03-15",
+    "first_name": "Lifts",
+    "last_name": "A-Lot",
+    "id": "MEM10001"
+  },
+  "provider": {
+    "first_name": "Has-Your",
+    "last_name": "Back",
+    "npi": "9876543210"
+  },
+  "service_types": ["professional_physician_visit_office", "chiropractic"],
+  "trading_partner_id": "premium_gold_insurance"
+}
+```
+
+---
+
+# X12 Eligibility response
+
+```html
+HL*1**20*1~NM1*PR*2*Premium Gold Insurance Co.*****PI*0123456~HL*2*1*21*1~NM1*1P*
+1*Back*Has*Your***XX*9876543210~HL*3*2*22*0~TRN*2*89368DC6A14E4E529AA876ED416E8A9F*
+1453915417NM1*IL*1*A-lot*Lifts****MI*MEM10001~N3*2150 Pleasant Drive~N4*Sunny*CA*
+900010001~DMG*D8*19820315*M~DTP*291*D8*20141001~EB*B**98****10~EB*A**33*****.20~
+```
+
+### oh God make it stop
+
+---
+
+# Our Eligibility response
+
+```javascript
+{
+  "coverage": [
+    "coinsurance": [
+      {
+        "benefit_percent": 0.2,
+        "service_types": [
+          "chiropractic"
+        ]
+      }
+    ],
+    "copay": {
+      "copayment": {
+        "amount": "10",
+        "currency": "USD"
+      },
+      "service_types": [
+        "professional_physician_visit_office"
+      ]
+    }
+  ],
+  "plan_begin_date": "2014-10-01",
+
+  (...and so on...)
+}
+```
+
+---
+### Obligatory map of API usage
+
+.center[<img src="AllEligiblityResponses.png" class="really-big-img" alt="Eligiblity API Usage">]
+
+---
+
+class: center, middle
+
+# Enter the data storage debate:
+### relational? graph? document store...?
+
+---
+
+class: center, middle
+
+#Problem 1:
+
+### How do we identify and recommend similar doctors within our data?
+
+--
+
+class: center, middle
+
+### Enter graphs.
+
+---
+
+class: center
+
+# Graph DB Schema
+
+.center[<img src="HealthGraph.png" class=graph-schema alt="Eligiblity API Usage">]
+
+
+---
+background-image: url(providers_100k_v1_small.jpeg)
+
+### PokitDok Top 100K Providers
+
+---
 
    </textarea>
     <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
