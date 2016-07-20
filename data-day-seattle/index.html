@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GraphsVTables</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(https://fonts.googleapis.com/css?family=Montserrat);
+      @import url(https://fonts.googleapis.com/css?family=Muli);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body {
+        font-family: 'Muli';
+      }
+
+      .slide {
+        background: #681d68;
+        color: white;
+      }
+
+      h1, h3, h4, h5, h6 {
+          font-weight: normal;
+          font-family: "Muli",Arial,Helvetica,sans-serif;
+          letter-spacing: normal;
+      }
+
+      .h6 {
+          display: inline;
+      }
+
+      h2 {
+        font-family: "Muli",Arial,Helvetica,sans-serif;
+        font-weight: 200;
+        font-size: 2.5rem;
+        text-transform: uppercase;
+      }
+
+      .remark-code, .remark-inline-code {
+        font-family: 'Ubuntu Mono';
+      }
+
+      .pd-logo {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 150px;
+        height: 45px;
+      }
+
+      .big-img {
+        height: 450px;
+      }
+
+      .really-big-img {
+        height: 600px;
+      }
+
+      .hco-img {
+        width: 90%;
+        height: 90%;
+      }
+
+      a {
+        color: #ff9406;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+layout: true
+class: slide
+<img src="pd-logo.png" class="pd-logo">
+
+---
+
+class: center,middle
+
+# Graphs vs Tables: Ready? Fight.
+### Lessons learned from building similarity models from structured healthcare data in both graph and relational dbs
+#### Denise Gosnell, PhD
+#### Data Scientist, PokitDok
+
+
+---
+
+# /about/us
+
+---
+# `\(\LaTeX{}\)` in remark
+
+---
+
+# Display and Inline
+
+1. This is an inline integral: `\(\int_a^bf(x)dx\)`
+2. More `\(x={a \over b}\)` formulae.
+
+Display formula:
+
+$$e^{i\pi} + 1 = 0$$
+
+   </textarea>
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
+    <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML&delayStartupUntil=configured" type="text/javascript"></script>
+    <script type="text/javascript">
+      var slideshow = remark.create();
+
+      // Setup MathJax
+      MathJax.Hub.Config({
+          tex2jax: {
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+          }
+      });
+      MathJax.Hub.Queue(function() {
+          $(MathJax.Hub.getAllJax()).map(function(index, elem) {
+              return(elem.SourceElement());
+          }).parent().addClass('has-jax');
+      });
+
+      MathJax.Hub.Configured();
+    </script>
+  </body>
+</html>
