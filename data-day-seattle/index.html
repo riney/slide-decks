@@ -46,6 +46,11 @@
         height: 45px;
       }
 
+      .med-img {
+        height: 350px;
+      }
+
+
       .big-img {
         height: 450px;
       }
@@ -92,37 +97,42 @@ class: slide
 
 ### First Half: 12:50 - 1:35 (ish)
 #### Intro to the debate
-#### Similarity from Graph traversals
-#### Similarity from Tabular data
+#### Similarity from graph traversals
+#### Demo
 
 ### Second Half: 1:45 - 2:30 (ish)
-#### Demos
+#### Similarity from tables
+#### Demo
 #### Discussion
- ¯\\_(ツ)_/¯
-
 ---
 
 class: center,middle
 
-# Graphs vs Tables: Ready? Fight.
+# Graphs vs Tables:
+# Ready? Fight.
 ### Lessons learned from building similarity models from structured healthcare data in both graph and relational dbs
 #### Denise Gosnell, PhD
 #### Data Scientist, PokitDok
 
+---
+class: left, middle
+
+# False Dichotomy:
+### A situation that is not jointly exhaustive
+### or that is not mutually exclusive
+### or that is possibly neither.
 
 ---
 
-# /agenda
+class: center, middle
 
-### First Half: 12:50 - 1:35 (ish)
-#### Intro to the debate
-#### Similarity from Graph traversals
-#### Similarity from Tabular data
+### If you're not with us, you're against us.
 
-### Second Half: 1:45 - 2:30 (ish)
-#### Demos
-#### Discussion
- ¯\\_(ツ)_/¯
+---
+
+class: center, middle
+
+### Graphs vs. Tables
 
 ---
 
@@ -134,60 +144,9 @@ class: center,middle
 
 ---
 
-class: center, middle
+### Obligatory map of API usage
 
-# Health?
-
----
-
-class: center, middle
-
-# #1
-
---
-
-### Medical bills are the primary cause of personal bankruptcy in the U.S.
-
----
-
-class: center, middle
-
-# $12,900
-
---
-
-### Average out of pocket spend before insurance starts paying, for families on HDHPs
-
----
-
-class: center, middle
-
-# $42.8 billion
-
---
-
-### National uncompensated care costs (charity care + bad debt), 2014
-
----
-
-.center[<img src="tc.png" class="big-img" alt="apple 2+">]
-
-Source: "What’s Really Killing Digital Health Startups" 10/30/2015 by John Sung Kim (@JohnSungKim)
-[http://techcrunch.com/2015/10/30/whats-really-killing-digital-health-startups/](http://techcrunch.com/2015/10/30/whats-really-killing-digital-health-startups/)
-
----
-
-# The core == insurance companies (payers)
-
-<ul>
-  <li>Eligibility (coverage, plan structure, deductibles)</li>
-  <li>Claims and claims status</li>
-  <li>Enrollment</li>
-  <li>Authorizations</li>
-  <li>Referrals</li>
-</ul>
-
-### ... AKA ASC X12 5010.
+.center[<img src="AllEligiblityResponses.png" class="really-big-img" alt="Eligiblity API Usage">]
 
 ---
 
@@ -266,12 +225,6 @@ HL*1**20*1~NM1*PR*2*Premium Gold Insurance Co.*****PI*0123456~HL*2*1*21*1~NM1*1P
   (...and so on...)
 }
 ```
-
----
-### Obligatory map of API usage
-
-.center[<img src="AllEligiblityResponses.png" class="really-big-img" alt="Eligiblity API Usage">]
-
 ---
 
 class: center, middle
@@ -299,15 +252,260 @@ class: center
 
 # Graph DB Schema
 
-.center[<img src="HealthGraph.png" class=graph-schema alt="Eligiblity API Usage">]
+.center[<img src="HealthGraph.png" class=graph-schema alt="Graph DB Schema">]
 
 
 ---
+
 background-image: url(providers_100k_v1_small.jpeg)
 
 ### PokitDok Top 100K Providers
 
 ---
+
+class: center, middle
+
+#Problem 1:
+
+### How do we identify and recommend similar doctors within our data?
+
+---
+
+class: center, middle
+
+#Sub Problem:
+
+### How do we identify similar doctors?
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_1.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="doc_sim_0.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+
+class: center, middle
+
+.center[<img src="doc_sim1_5.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+
+class: center, middle
+
+.center[<img src="doc_sim1.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="doc_sim2png.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="doc_sim3.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+#Sub Problem:
+
+### How do we recommend similar doctors within our data?
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_1.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_2.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_3.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_4.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_5.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_6.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+.center[<img src="bipartieGraphSim_7.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+class: center, middle
+
+## [Demo](https://github.com/pokitdok/gremlin-python)
+
+---
+
+class: center, middle
+
+#Problem 2:
+
+### How do we identify similar entities within our data?
+
+--
+
+class: center, middle
+
+### Enter Tables.
+
+---
+
+# Our Eligibility response
+
+```javascript
+{
+  "coverage": [
+    "coinsurance": [
+      {
+        "benefit_percent": 0.2,
+        "service_types": [
+          "chiropractic"
+        ]
+      }
+    ],
+    "copay": {
+      "copayment": {
+        "amount": "10",
+        "currency": "USD"
+      },
+      "service_types": [
+        "professional_physician_visit_office"
+      ]
+    }
+  ],
+  "plan_begin_date": "2014-10-01",
+
+  (...and so on...)
+}
+```
+---
+
+# describe term x document matrices
+
+
+---
+
+# describe similarity options:
+### co-occurance
+### k-means clustering on document vectors
+
+---
+
+# Code walk through showing
+# Term x Doc
+
+---
+
+# Code walk through showing
+# co-occurance
+
+---
+
+class: center, middle
+
+.center[<img src="Co-Occurance.jpg" class="big-img" alt="Graph Similarity">]
+
+# Co-occurrence Analysis
+
+---
+
+
+# Code walk through showing
+# k means
+
+---
+
+class: center, middle
+
+.center[<img src="kMeansInertia.png" class="med-img" alt="Graph Similarity">]
+
+# Kmeans Analysis
+
+---
+
+class: center, middle
+
+.center[<img src="diffInertia.png" class="med-img" alt="Graph Similarity">]
+
+# Kmeans Analysis
+
+---
+background-image: url(CirclePacking.png)
+
+### Visualizing Similarity Clusters
+
+[Circle Packing Interactive] (http://10.0.2.129:8000/index.html?data=tfidf.json)
+
+---
+
+# Graphs vs tables conclusion?
+
+---
+
+.center[<img src="Co-Occurance.jpg" class="big-img" alt="Graph Similarity">]
+
+### Similar Payers
+
+---
+
+background-image: url(SimilarTradingPartners.png)
+
+### Similar Payers
+
+---
+
+graph = table
+
+---
+
+class: center,middle
+
+# Graphs vs Tables:
+# Ready? Fight.
+### Lessons learned from building similarity models from structured healthcare data in both graph and relational dbs
+#### Denise Gosnell, PhD
+#### Data Scientist, PokitDok
+
+---
+
+
 
    </textarea>
     <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
