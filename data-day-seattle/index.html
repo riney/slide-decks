@@ -46,6 +46,10 @@
         height: 45px;
       }
 
+      .small-img {
+        height: 250px;
+      }
+
       .med-img {
         height: 350px;
       }
@@ -135,12 +139,14 @@ class: center, middle
 ### Graphs vs. Tables
 
 ---
+class: center, middle
 
 # /about/pokitdok
 
 --
+class: center, middle
 
-### "The Operating System For The Business Of Health"
+### The Operating System For The Business Of Health
 
 ---
 
@@ -304,7 +310,7 @@ class: center, top
 $$pr( E(v_d|v_c) ) = \frac{|(v_d, v_t, v_c)|}{|E(v_t, v_c)|} $$
 ---
 
-class: center, top
+class: left, top
 
 # OLAP Traversals
 
@@ -313,7 +319,7 @@ class: center, top
 
 ---
 
-class: center, top
+class: left, top
 
 # OLAP Traversals
 
@@ -327,7 +333,7 @@ g.V.has("id", id)
 ---
 
 
-class: center, top
+class: left, top
 
 # OLAP Traversals
 
@@ -341,7 +347,7 @@ g.V.has("id", id).in()
 ---
 
 
-class: center, top
+class: left, top
 
 # OLAP Traversals
 
@@ -355,7 +361,7 @@ g.V.has("id", id).in().out()
 ---
 
 
-class: center, top
+class: left, top
 
 # OLAP Traversals
 
@@ -368,7 +374,7 @@ g.V.has("id", id).in().out().filter{it.id != id}
 
 ---
 
-class: center, top
+class: left, top
 
 # OLAP Traversals
 
@@ -379,7 +385,7 @@ g.V.has("id", id).in().out().filter{it.id !=id}.groupCount(m)
 ```
 
 ---
-class: center, top
+class: left, top
 
 # OLAP Traversals
 
@@ -532,38 +538,155 @@ class: center, middle
 ```
 ---
 
-# describe term x document matrices
+# Our Eligibility response
 
+### JSON to tables?
 
----
+```
+         |  member_id  |  npi  |     date     |  coverage_amount | ...
+event_1  |     abc     |  123  |  2016 01 01  |       100        | ...
+event_2  |     def     |  123  |  2016 01 01  |        75        | ...
+event_3  |     abc     |  456  |  2016 01 02  |       100        | ...
+event_4  |     def     |  456  |  2016 01 02  |        75        | ...
+event_5  |     abc     |  789  |  2016 01 03  |       300        | ...
+event_6  |     def     |  789  |  2016 01 03  |       200        | ...
+  ...          ...        ...        ...              ...          ...
+event_n  |     abc     |  123  |  2016 01 08  |       100        | ...
 
-# describe similarity options:
-### co-occurance
-### k-means clustering on document vectors
-
----
-
-# Code walk through showing
-# Term x Doc
-
----
-
-# Code walk through showing
-# co-occurance
+```
 
 ---
 
-class: center, middle
+# What we really want: matrices
 
-.center[<img src="Co-Occurance.jpg" class="big-img" alt="Graph Similarity">]
+--
 
+```
+         |  member_id.abc  |  member_id.def  |  npi.123  |  npi.456  |  npi.789 | ...
+event_1  |        1        |        0        |     1     |     0     |     0    | ...
+event_2  |        0        |        1        |     1     |     0     |     0    | ...
+event_3  |        1        |        0        |     0     |     1     |     0    | ...
+event_4  |        0        |        1        |     0     |     1     |     0    | ...
+event_5  |        1        |        0        |     0     |     0     |     1    | ...
+event_6  |        0        |        1        |     0     |     0     |     1    | ...
+  ...            ...               ...            ...         ...         ...
+event_n  |        1        |        0        |     1     |     0     |     0    | ...
+
+```
+---
+# JSON to Matrix
+
+```python
+def key_extract_recursive(input_data,
+                          list_of_keys,
+                          ignore_keys=[],
+                          parent_key=None,
+                          key_separator="."):
+    """
+    >>> key_extract_recursive({ "b": 1}, [], [], "a")
+    ['a.b.1']
+    >>> key_extract_recursive({}, [], [], "a" )
+    []
+    >>> key_extract_recursive({'b': 1 }, [], [] )
+    ['b.1']
+    >>> key_extract_recursive({'b': {'c': 1 }}, [], ["c"], "a" )
+    []
+    >>> key_extract_recursive({ 'a': {'b': [{'c': 1 }, {'c':1}]}}, [], [])
+    ['a.b.c.1', 'a.b.c.1']
+    >>> key_extract_recursive({'b': 1, 'a': {'c': 'd'} } )
+    ['b.1', 'a.c.d']
+    """
+```
+
+---
+# JSON to Matrix
+
+```python
+def key_extract_recursive(input_data, list_of_keys, ignore_keys=[],
+                          parent_key=None, key_separator="."):
+    if input_data:
+        if type(input_data) is dict:
+            for key, value in input_data.iteritems():
+                if not key in ignore_keys:
+                    key = '_'.join(key.split()).upper()
+                    next_key = key
+                    if parent_key:
+                        next_key = parent_key + key_separator + key
+                    list_of_keys = key_extract_recursive(value, list_of_keys,
+                                                         ignore_keys, next_key)
+        elif type(input_data) is list:
+            for item in input_data:
+                list_of_keys = key_extract_recursive(item, list_of_keys,
+                                                     ignore_keys, parent_key)
+        else:
+            input_data = '_'.join(str(input_data).split()).upper()
+            terminal_value = input_data
+            if parent_key:
+                terminal_value = parent_key + key_separator + input_data
+            list_of_keys.append(terminal_value)
+    return list_of_keys
+```
+---
+
+# JSON to Matrix
+
+
+```python
+from sklearn.feature_extraction import DictVectorizer
+import json
+
+def jsonl_to_binary_matrix(input_file):
+    data = []
+    with open(file_name, 'r') as read_file:
+        for line in read_file:
+            line_data = json.loads(line)
+            file_grammar = key_extract_recursive(line_data, [], IGNORE_KEYS)
+            file_dict = {key: 1 for key in file_grammar}
+            data.append(file_dict)
+    vector_maker = DictVectorizer(dtype=np.float32)
+    data = vector_maker.fit_transform(data)
+```
+---
+
+# From matrix to  ...
+### You want to do some reductions?
+####            PCA, SVD, NMF ... go crazy.
+
+### You say similarity? Ready for that too.
+####            Entity Co-occurence, K-means clustering, LDA
+
+--
+```
+
+
+                                                            (•_•)
+
+                                                                    ( •_•)>⌐■-■
+
+                                                                               (⌐■_■)
+```
+---
+
+class: left, top
 # Co-occurrence Analysis
+.center[<img src="Co-Occurance.jpg" class="small-img" alt="Graph Similarity">]
+
+```python
+import numpy as np
+import seaborn as sns
+import pandas as pd
+
+co_occurance_matrix = np.dot(data, data.transpose())
+co_occurance_df = pd.DataFrame(data=co_occurance[0:,0:])
+sns.set()
+sns.heatmap(co_occurance_df, annot=True, fmt="d", linewidths=.5)
+```
 
 ---
+class: center, middle
+# Dimensionality Reduction and K-Means Visualization
 
-
-# Code walk through showing
-# k means
+## DEMO
 
 ---
 
@@ -582,31 +705,75 @@ class: center, middle
 # Kmeans Analysis
 
 ---
-background-image: url(CirclePacking.png)
 
-### Visualizing Similarity Clusters
+# Visualizing Clusters
 
-[Circle Packing Interactive] (http://10.0.2.129:8000/index.html?data=tfidf.json)
+.center[<img src="CirclePacking.png" class="big-img" alt="Graph Similarity">]
+
+---
+
+# Graphs v. Tables
+
+### did we decide anything?
 
 ---
 
-# Graphs vs tables conclusion?
+# Graphs v. Tables
+
+### What problem are you trying to solve?
+### Does it need a database?
+### Scalability? Run Time? Dev Time?
+### Relationships vs verbose properties?
 
 ---
+
+class: left, top
+
+### Graphs: great for relationships
+
+.center[<img src="bipartieGraphSim_7.png" class="med-img" alt="Graph Similarity">]
+
+```python
+g.V.has("id",id).out("viewed")
+   .in("scheduled_with").filter{it.id != id}
+   .out("viewed")
+   .groupCount(m)
+sort{a,b -> b.value <=> a.value}[0..2]
+```
+
+---
+
+class: left, top
+### Tables: great for exploiting verbosity
+.center[<img src="Co-Occurance.jpg" class="small-img" alt="Graph Similarity">]
+
+```python
+import numpy as np
+import seaborn as sns
+import pandas as pd
+
+co_occurance_matrix = np.dot(data, data.transpose())
+co_occurance_df = pd.DataFrame(data=co_occurance[0:,0:])
+sns.set()
+sns.heatmap(co_occurance_df, annot=True, fmt="d", linewidths=.5)
+```
+
+---
+
+### Tables: Similarity
 
 .center[<img src="Co-Occurance.jpg" class="big-img" alt="Graph Similarity">]
-
-### Similar Payers
 
 ---
 
 background-image: url(SimilarTradingPartners.png)
 
-### Similar Payers
+### Graphs: Similarity
 
 ---
+class: center, middle
 
-graph = table
+# graph = table
 
 ---
 
@@ -618,7 +785,6 @@ class: center,middle
 #### Denise Gosnell, PhD
 #### Data Scientist, PokitDok
 
----
 
 
 
