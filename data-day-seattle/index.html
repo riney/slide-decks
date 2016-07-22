@@ -279,42 +279,116 @@ class: center, middle
 
 ---
 
-class: center, middle
+class: center, top
 
-.center[<img src="bipartieGraphSim_1.png" class="big-img" alt="Graph Similarity">]
+# Triangular Closure
 
----
-
-class: center, middle
-
-.center[<img src="doc_sim_0.png" class="big-img" alt="Graph Similarity">]
+.center[<img src="RecommendDoc.png" class="med-img" alt="Graph Similarity">]
 
 ---
 
+class: center, top
 
-class: center, middle
+# Triangular Closure
 
-.center[<img src="doc_sim1_5.png" class="big-img" alt="Graph Similarity">]
+.center[<img src="probabilisticPaths.png" class="med-img" alt="Graph Similarity">]
+
+---
+
+class: center, top
+
+# Triangular Closure
+
+.center[<img src="probabilisticPaths.png" class="med-img" alt="Graph Similarity">]
+
+$$pr( E(v_d|v_c) ) = \frac{|(v_d, v_t, v_c)|}{|E(v_t, v_c)|} $$
+---
+
+class: center, top
+
+# OLAP Traversals
+
+.center[<img src="bipartieGraphSim_1.png" class="med-img" alt="Graph Similarity">]
+
+
+---
+
+class: center, top
+
+# OLAP Traversals
+
+.center[<img src="doc_sim_0.png" class="med-img" alt="Graph Similarity">]
+
+```python
+g.V.has("id", id)
+
+```
 
 ---
 
 
-class: center, middle
+class: center, top
 
-.center[<img src="doc_sim1.png" class="big-img" alt="Graph Similarity">]
+# OLAP Traversals
+
+.center[<img src="doc_sim1_5.png" class="med-img" alt="Graph Similarity">]
+
+
+```python
+g.V.has("id", id).in()
+```
 
 ---
 
-class: center, middle
 
-.center[<img src="doc_sim2png.png" class="big-img" alt="Graph Similarity">]
+class: center, top
+
+# OLAP Traversals
+
+.center[<img src="doc_sim2png.png" class="med-img" alt="Graph Similarity">]
+
+```python
+g.V.has("id", id).in().out()
+```
+
 
 ---
 
-class: center, middle
 
-.center[<img src="doc_sim3.png" class="big-img" alt="Graph Similarity">]
+class: center, top
 
+# OLAP Traversals
+
+.center[<img src="doc_sim2png.png" class="med-img" alt="Graph Similarity">]
+
+```python
+g.V.has("id", id).in().out().filter{it.id != id}
+```
+
+
+---
+
+class: center, top
+
+# OLAP Traversals
+
+.center[<img src="doc_sim3.png" class="med-img" alt="Graph Similarity">]
+
+```groovy
+g.V.has("id", id).in().out().filter{it.id !=id}.groupCount(m)
+```
+
+---
+class: center, top
+
+# OLAP Traversals
+
+.center[<img src="doc_sim3.png" class="med-img" alt="Graph Similarity">]
+
+```groovy
+g.V.has("id", id).in().out().filter{it.id !=id}.groupCount(m)
+sort{a,b -> b.value <=> a.value}[0..10]
+```
 ---
 
 class: center, middle
