@@ -252,6 +252,22 @@ class: center, middle
 
 ---
 
+background-image: url(top_grossing_referral_physicians_small.jpeg
+
+#### Top Grossing Physicians from Medicare Reimbursements
+
+---
+
+class: center, top
+
+# So yesterday, this happened
+
+.center[<img src="1Bfraud.png" class="small-img" alt="Graph DB Schema">]
+
+#### [From the Miami Herald](http://www.miamiherald.com/news/local/community/miami-dade/article91231277.html)
+
+---
+
 class: left, middle
 
 # Graph DB Infrastructure
@@ -522,8 +538,21 @@ class: left, top
 ### Architecture and Implementation:
 Modeling relationships within data for extracting useful information
 is well documented; but implementation is different issue.
+
+
+--
+
+class: left, top
+
 ### DB Maturity:
 We've had ups and downs with just about every vendor out there.
+
+
+--
+
+class: left, top
+
+
 ### Visualizations:
 D3 and Gephi get you covered with everything you need.
 
@@ -539,11 +568,16 @@ class: center,middle
 
 ---
 
+background-image: url(top_grossing_referral_physicians_small.jpeg)
+
+### Part 1 Was:
+---
+
 class: center, middle
 
 #Problem 2:
 
-### How do we identify similar entities within our data?
+### How do we use the verbose features of healthcare transactions to infer similarity?
 
 --
 
@@ -712,8 +746,10 @@ def jsonl_to_binary_matrix(input_file):
 ### You want to do some reductions?
 ####            PCA, SVD, NMF ... go crazy.
 
+--
+
 ### You say similarity? Ready for that too.
-####            Entity Co-occurence, K-means clustering, LDA
+####            Entity Co-occurence, K-means clustering, LDA ...
 
 ```
 
@@ -775,7 +811,7 @@ class: left, top
 
 # Where to go from here?
 
-### For these slides, code, and notebooks: DeniseKGosnell on GitHub
+### For these slides, code, and notebooks: DeniseKGosnell on GitHub/Twitter
 ### Our blog for more on Kafka, load testing and infrastructure discussions: fullmetalhealth.com
 
 ---
@@ -785,8 +821,16 @@ class: left, top
 # The Brass Tax about Tables
 ### Architecture and Implementation:
 Very well documented; your problem has probably already been solved.
+
+--
+
+
 ### DB Maturity:
 Well documented, but scalability is relative.
+
+
+--
+
 ### Visualizations:
 Looking at a table tells you nothing. (pretty much)
 
