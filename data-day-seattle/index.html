@@ -521,13 +521,23 @@ class: left, top
 class: left, top
 
 # The Brass Tax about Graphs
-### The theory:
+### Architecture and Implementation:
 Modeling relationships within data for extracting useful information
 is well documented; but implementation is different issue.
 ### DB Maturity:
 We've had ups and downs with just about every vendor out there.
 ### Visualizations:
 D3 and Gephi get you covered with everything you need.
+
+---
+
+class: center,middle
+
+# Graphs vs Tables:
+# Ready? Fight.
+### Part 2
+#### Denise Gosnell, PhD
+#### Data Scientist, PokitDok
 
 ---
 
@@ -542,6 +552,21 @@ class: center, middle
 class: center, middle
 
 ### Enter Tables.
+
+---
+
+class: left, middle
+
+# Relational DB Infrastructure
+
+--
+
+class: left, middle
+
+1. API event streaming with Kafka
+2. Persistence to SQL DB
+3. Batch processing for R&D
+4. Spark streaming for production models
 
 ---
 
@@ -749,6 +774,27 @@ class: center, middle
 
 ---
 
+class: left, top
+
+# Where to go from here?
+
+### For these slides, code, and notebooks: DeniseKGosnell on GitHub
+### Our blog for more on Kafka, load testing and infrastructure discussions: fullmetalhealth.com
+
+---
+
+class: left, top
+
+# The Brass Tax about Tables
+### Architecture and Implementation:
+Very well documented; your problem has probably already been solved.
+### DB Maturity:
+Well documented, but scalability is relative.
+### Visualizations:
+Looking at a table tells you nothing. (pretty much)
+
+---
+
 # Graphs v. Tables
 
 ### did we decide anything?
@@ -806,11 +852,6 @@ sns.heatmap(co_occurance_df, annot=True, fmt="d", linewidths=.5)
 background-image: url(SimilarTradingPartners.png)
 
 ### Graphs: Similarity
-
----
-class: center, middle
-
-# graph = table
 
 ---
 
